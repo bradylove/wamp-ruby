@@ -16,8 +16,8 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "WAMP"
-  gem.homepage = "http://github.com/bradylove/WAMP"
+  gem.name = "wamp"
+  gem.homepage = "http://github.com/bradylove/wamp-ruby"
   gem.license = "MIT"
   gem.summary = %Q{A Ruby implementation of the WAMP WebSocket subprotocol}
   gem.description = %Q{A Ruby implementation of the WAMP (Web Application Messaging Protocol) WebSocket subprotocol}
