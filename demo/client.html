@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://autobahn.s3.amazonaws.com/js/autobahn.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="client.js"></script>
+  </head>
+  <body>
+    <div id="debug-data"></div>
+    <button onclick="connect();">Connect</button>
+    <input type="text" id="prefix-curie"></input><button onclick="registerPrefix()">Register Prefix</button>
+    <input type="text" id="topic-name"></input><button onclick="subscribe()">Subscribe</button><button onclick="unsubscribe()">Unsubscribe</button>
+    <input type="text" id="simple-msg"></input><button onclick="sendSimpleMsg()">Send</button>
+  </abody>
+</html>
