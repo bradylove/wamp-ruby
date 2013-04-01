@@ -37,13 +37,6 @@ module WAMP
       end
     end
 
-    def send_event_to_all
-      msg = [8, 'ws://localhost:9292/', "Here I am, Rock you like a hurricane"]
-      @sockets.each_pair do |s, c|
-        s.send msg.to_json
-      end
-    end
-
   private
 
     def handle_open(websocket, event)
@@ -107,6 +100,10 @@ module WAMP
     def handle_publish(socket, data)
       topic   = topics[data[1]]
       payload = data[2]
+
+      puts "PAYLOAD: #{payload}"
+      puts "TOPIC: #{topic.name}"
+
       exclude = data[3]
       include = data[4]
 

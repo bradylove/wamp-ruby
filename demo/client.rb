@@ -1,4 +1,4 @@
-require 'wamp'
+require '../lib/wamp'
 
 Client = WAMP::Client.new
 

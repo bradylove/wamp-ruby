@@ -7,7 +7,8 @@ module WAMP
   class Client
     include WAMP::Bindable
 
-    attr_accessor :id, :socket, :wamp_protocol, :server_ident, :topics, :callbacks
+    attr_accessor :id, :socket, :wamp_protocol, :server_ident, :topics, :callbacks,
+                  :prefixes
 
     # WAMP Client
     #   Connects to WAMP server, after connection client should receve WELCOME message
@@ -20,6 +21,7 @@ module WAMP
       @wamp_protocol = nil
       @server_ident  = nil
 
+      @prefixes  = {}
       @topics    = []
       @callbacks = {}
     end
@@ -38,17 +40,23 @@ module WAMP
       end
     end
 
+    def prefix(prefix, topic_uri)
+      socket.send [WAMP::MessageType[:PREFIX], prefix, topic_uri].to_json
+
+      prefixes[prefix] = topic_uri
+    end
+
     def subscribe(topic_uri)
-      socket.send [5, topic_uri].to_json
+      socket.send [WAMP::MessageType[:SUBSCRIBE], topic_uri].to_json
 
       topics << topic_uri
     end
 
     def publish(topic_uri, payload, options = {})
-      exclude = options.fetch(:exclude, false)
-      include = options.fetch(:include, [])
+      exclude = options.fetch(:exclude, nil)
+      include = options.fetch(:include, nil)
 
-      socket.send [7, topic_uri, payload, exclude, include].to_json
+      socket.send [WAMP::MessageType[:PUBLISH], topic_uri, payload, exclude, include].to_json
     end
 
   private
@@ -76,9 +84,9 @@ module WAMP
     # Handle welcome message from server
     # WELCOME data structure [0, CLIENT_ID, WAMP_PROTOCOL, SERVER_IDENTITY]
     def handle_welcome(data)
-      id            = data[1]
-      wamp_protocol = data[2]
-      server_ident  = data[3]
+      @id            = data[1]
+      @wamp_protocol = data[2]
+      @server_ident  = data[3]
 
       trigger(:welcome, self)
     end
