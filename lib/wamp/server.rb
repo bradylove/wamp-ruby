@@ -3,9 +3,9 @@ require 'json'
 
 module WAMP
   class Server
-    attr_accessor :options, :sockets, :topics
+    include WAMP::Bindable
 
-    CALLBACKS = [:subscribe, :unsubscribe, :publish, :call, :prefix, :connect, :disconnect]
+    attr_accessor :options, :sockets, :topics, :callbacks
 
     def initialize(options = {})
       @options = options
@@ -15,9 +15,13 @@ module WAMP
       @callbacks = {}
     end
 
+    def available_bindings
+      [:subscribe, :unsubscribe, :publish, :call, :prefix, :connect, :disconnect]
+    end
+
     def start
       lambda do |env|
-        # Faye::WebSocket.load_adapter('thin')
+        Faye::WebSocket.load_adapter('thin')
         if Faye::WebSocket.websocket?(env)
           ws = Faye::WebSocket.new(env, ['wamp'], ping: 25)
 
@@ -31,15 +35,6 @@ module WAMP
           [200, {'Content-Type' => 'text/plain'}, ['Hello']]
         end
       end
-    end
-
-    def bind(name, &callback)
-      raise "Invalid callback name: #{name}" unless CALLBACKS.include? name
-      @callbacks[name] = callback
-    end
-
-    def trigger(name, *args)
-      @callbacks[name].call *args if @callbacks[name]
     end
 
     def send_event_to_all
@@ -90,7 +85,7 @@ module WAMP
     def handle_subscribe(socket, data)
       topic_uri = data[1]
 
-      @topics[topic_uri] ||= WAMP::Topic.new(topic_uri)
+      topic = @topics[topic_uri] ||= WAMP::Topic.new(topic_uri)
       socket.add_topic(@topics[topic_uri])
 
       trigger(:subscribe, socket, topic.name)
@@ -117,7 +112,7 @@ module WAMP
 
       if exclude == true
         exclude = [socket.id]
-      elsif exclude == false
+      elsif exclude == false || exclude.nil?
         exclude = []
       end
 

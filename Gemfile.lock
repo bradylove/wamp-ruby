@@ -69,6 +69,7 @@ DEPENDENCIES
   fuubar
   guard-rspec
   jeweler (~> 1.8.4)
+  pry
   rb-fsevent
   rb-inotify
   rdoc (~> 3.12)

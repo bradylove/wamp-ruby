@@ -5,6 +5,8 @@ module WAMP
 
   ROOT = File.expand_path(File.dirname(__FILE__))
 
+  autoload :Client,      File.join(ROOT, "wamp", "client")
+  autoload :Bindable,    File.join(ROOT, "wamp", "bindable")
   autoload :Server,      File.join(ROOT, "wamp", "server")
   autoload :Socket,      File.join(ROOT, "wamp", "socket")
   autoload :Topic,       File.join(ROOT, "wamp", "topic")
