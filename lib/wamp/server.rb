@@ -101,9 +101,6 @@ module WAMP
       topic   = topics[data[1]]
       payload = data[2]
 
-      puts "PAYLOAD: #{payload}"
-      puts "TOPIC: #{topic.name}"
-
       exclude = data[3]
       include = data[4]
 
@@ -129,8 +126,6 @@ module WAMP
 
     def handle_close(websocket, event)
       socket = @sockets.delete(websocket)
-
-      p [socket.id, :close, event.code, event.reason]
 
       trigger(:disconnect, socket)
     end

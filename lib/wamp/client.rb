@@ -1,21 +1,21 @@
 require 'faye/websocket'
 require 'json'
 require 'eventmachine'
-require 'pry'
 
 module WAMP
   class Client
     include WAMP::Bindable
 
     attr_accessor :id, :socket, :wamp_protocol, :server_ident, :topics, :callbacks,
-                  :prefixes
+                  :prefixes, :ws_server
 
     # WAMP Client
     #   Connects to WAMP server, after connection client should receve WELCOME message
     #   from server.
     #   Client can then register prefix, call, subscribe, unsubscribe, and publish
 
-    def initialize
+    def initialize(options = {})
+      @ws_server = options[:host] || "ws://localhost:9000"
       @id     = nil
       @socket = nil
       @wamp_protocol = nil
@@ -32,11 +32,11 @@ module WAMP
 
     def start
       EM.run do
-        ws = Faye::WebSocket::Client.new('ws://localhost:9000')
+        ws = Faye::WebSocket::Client.new(ws_server)
 
         ws.onopen    = lambda { |event| handle_open(ws, event) }
         ws.onmessage = lambda { |event| handle_message(event) }
-        ws.onclose   = lambda { |event| handle_close(event); }
+        ws.onclose   = lambda { |event| handle_close(event) }
       end
     end
 
@@ -57,6 +57,10 @@ module WAMP
       include = options.fetch(:include, nil)
 
       socket.send [WAMP::MessageType[:PUBLISH], topic_uri, payload, exclude, include].to_json
+    end
+
+    def stop
+      EM.stop
     end
 
   private
