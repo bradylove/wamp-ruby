@@ -14,7 +14,8 @@ group :development do
   gem 'rb-fsevent'
   gem 'rb-inotify'
   gem 'fuubar'
-  gem "rdoc", "~> 3.12"
+  gem "yard"
+  gem 'redcarpet'
   gem "bundler"
   gem "jeweler", "~> 1.8.4"
 end

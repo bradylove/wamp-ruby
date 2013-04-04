@@ -27,7 +27,7 @@ describe WAMP::Server do
     end
 
     it "should raise an error if an invalid binding name is given" do
-      expect { server.bind(:invalid) {} }.to raise_error "Invalid callback name: invalid"
+      expect { server.bind(:invalid) {} }.to raise_error "Invalid binding: invalid"
     end
   end
 end

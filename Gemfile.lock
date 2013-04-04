@@ -43,6 +43,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
+    redcarpet (2.2.2)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -59,6 +60,7 @@ GEM
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
     thor (0.18.0)
+    yard (0.8.5.2)
 
 PLATFORMS
   ruby
@@ -72,6 +74,7 @@ DEPENDENCIES
   pry
   rb-fsevent
   rb-inotify
-  rdoc (~> 3.12)
+  redcarpet
   rspec
   thin
+  yard

@@ -12,6 +12,8 @@ module WAMP
   autoload :Topic,       File.join(ROOT, "wamp", "topic")
   autoload :MessageType, File.join(ROOT, "wamp", "message_type")
 
+  autoload :Protocols,   File.join(ROOT, "wamp", "protocols")
+
   class << self
     def version
       "#{MAJOR}.#{MINOR}.#{PATCH}"
