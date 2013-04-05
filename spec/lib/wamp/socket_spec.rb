@@ -5,7 +5,7 @@ class DummySocket
 end
 
 describe WAMP::Socket do
-  let(:new_socket) { WAMP::Socket.new(DummySocket.new) }
+  let(:new_socket) { WAMP::Socket.new("sampleid", DummySocket.new) }
 
   context "#initialization" do
     it "should return a client" do
@@ -23,7 +23,7 @@ describe WAMP::Socket do
     it "should send the welcome message" do
       ds = DummySocket.new
       ds.should_receive :send
-      WAMP::Socket.new(ds)
+      WAMP::Socket.new("sampleid", ds)
     end
   end
 

@@ -5,14 +5,21 @@ module WAMP
 
   ROOT = File.expand_path(File.dirname(__FILE__))
 
-  autoload :Client,      File.join(ROOT, "wamp", "client")
   autoload :Bindable,    File.join(ROOT, "wamp", "bindable")
+  autoload :Client,      File.join(ROOT, "wamp", "client")
   autoload :Server,      File.join(ROOT, "wamp", "server")
   autoload :Socket,      File.join(ROOT, "wamp", "socket")
   autoload :Topic,       File.join(ROOT, "wamp", "topic")
   autoload :MessageType, File.join(ROOT, "wamp", "message_type")
 
-  autoload :Protocols,   File.join(ROOT, "wamp", "protocols")
+  module Engines
+    autoload :Memory,      File.join(ROOT, "wamp", "engines", "memory")
+  end
+
+  # autoload :Protocols,   File.join(ROOT, "wamp", "protocols")
+  module Protocols
+    autoload :Version1, File.join(ROOT, "wamp", "protocols", "version_1")
+  end
 
   class << self
     def version

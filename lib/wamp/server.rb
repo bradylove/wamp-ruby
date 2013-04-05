@@ -40,7 +40,7 @@ module WAMP
   private
 
     def handle_open(websocket, event)
-      socket = @sockets[websocket] = WAMP::Socket.new(websocket)
+      socket = @sockets[websocket] = WAMP::Socket.new(SecureRandom.uuid, websocket)
 
       trigger(:connect, socket)
     end

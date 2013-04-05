@@ -1,12 +1,11 @@
-require 'securerandom'
 require 'json'
 
 module WAMP
   class Socket
     attr_accessor :id, :websocket, :topics, :prefixes
 
-    def initialize(websocket)
-      @id        = SecureRandom.uuid
+    def initialize(id, websocket)
+      @id        = id
       @topics    = []
       @prefixes  = {}
       @websocket = websocket
