@@ -13,6 +13,7 @@ module WAMP
       @topics    = {}
       @callbacks = {}
       @engine    = WAMP::Engines::Memory.new
+      @protocol  = WAMP::Protocols::Version1.new
     end
 
     def available_bindings
@@ -41,94 +42,100 @@ module WAMP
 
     def handle_open(websocket, event)
       client = @engine.create_client(websocket)
+              client.websocket.send @protocol.welcome(client.id)
 
       trigger(:connect, client)
     end
 
     def handle_message(websocket, event)
-      socket = @engine.find_clients(websocket: websocket)
-      # socket = @sockets[websocket]
+      client = @engine.find_clients(websocket: websocket).first
 
-      parsed_msg = JSON.parse(event.data)
-      msg_type   = parsed_msg[0]
+      data     = JSON.parse(event.data)
+      msg_type = data.shift
 
       case WAMP::MessageType[msg_type]
       when :PREFIX
-        prefix = parsed_msg[1]
-        uri    = parsed_msg[2]
-
-        socket.add_prefix(prefix, uri)
-
-        trigger(:prefix, socket, prefix, uri)
+        handle_prefix(client, data)
       when :CALL
-        # TODO handle RPC Call
+        handle_call(client, data)
       when :SUBSCRIBE
-        handle_subscribe(socket, parsed_msg)
+        handle_subscribe(client, data)
       when :UNSUBSCRIBE
-        topic_name = parsed_msg[1]
-        topic = @topics[topic_name]
-
-        trigger(:unsubscribe, socket, topic.name)
+        handle_unsubscribe(client, data)
       when :PUBLISH
-        handle_publish(socket, parsed_msg)
+        handle_publish(client, data)
       end
     end
 
+    # Handle a prefix message from a client
+    # PREFIX data structure [PREFIX, URI]
+    def handle_prefix(client, data)
+      prefix, uri = data
+
+      topic = @engine.find_or_create_topic(uri)
+      client.add_prefix(prefix, topic)
+
+      trigger(:prefix, client, prefix, uri)
+    end
+
+    # Handle RPC call message from a client
+    # CALL data structure [callID, procURI, ... ]
+    def handle_call(client, data)
+      call_id, proc_uri, *args = data
+
+      trigger(:call, client, call_id, proc_uri, args)
+    end
+
     # Handle a subscribe message from a client
-    # SUBSCRIBE data structure [5, TOPIC]
-    def handle_subscribe(socket, data)
-      topic_uri = data[1]
+    # SUBSCRIBE data structure [TOPIC]
+    def handle_subscribe(client, data)
+      topic = @engine.subscribe_client_to_topic client, data[0]
 
-      topic = @topics[topic_uri] ||= WAMP::Topic.new(topic_uri)
-      socket.add_topic(@topics[topic_uri])
-
-      trigger(:subscribe, socket, topic.name)
+      trigger(:subscribe, client, topic.uri)
     end
 
     # Handle an unsubscribe message from client
-    # UNSUBSCRIBE data structure [6, TOPIC]
-    def handle_unsubscribe(socket, data)
-      topic_uri = data[1]
-      topic     = @topics[topic_uri]
+    # UNSUBSCRIBE data structure [TOPIC]
+    def handle_unsubscribe(client, data)
+      topic = @topics[data[0]]
 
-      socket.remove_topic(topic) if topic
+      client.remove_topic(topic) if topic
 
-      trigger(:unsubscribe, socket, topic.name)
+      trigger(:unsubscribe, client, topic.uri)
     end
 
     # Handle a message published by a client
-    # PUBLISH data structure [7, TOPIC, DATA, EXCLUDE, INCLUDE]
-    def handle_publish(socket, data)
-      topic   = topics[data[1]]
-      payload = data[2]
+    # PUBLISH data structure [TOPIC, DATA, EXCLUDE, INCLUDE]
+    def handle_publish(client, data)
+      topic_name, payload, exclude, include = data
 
-      exclude = data[3]
-      include = data[4]
+      topic = @engine.find_or_create_topic(topic_name)
 
       if exclude == true
-        exclude = [socket.id]
+        exclude = [client.id]
       elsif exclude == false || exclude.nil?
         exclude = []
       end
 
       # Send payload to all sockets subscribed to topic
-      @sockets.each_pair do |k, v|
-        next if exclude.include? k
+      # Todo: Fix this
+      @engine.clients.each_pair do |k, v|
+        next if exclude.include? v.id
 
         if v.topics.include? topic
-          k.send [WAMP::MessageType[:EVENT], topic.name, payload].to_json
+          v.websocket.send [WAMP::MessageType[:EVENT], topic.uri, payload].to_json
         end
       end
 
       # Todo: Filter send with include
 
-      trigger(:publish, socket, topic.name, payload, exclude, include)
+      trigger(:publish, client, topic.uri, payload, exclude, include)
     end
 
     def handle_close(websocket, event)
-      socket = @sockets.delete(websocket)
+      client = @engine.delete_client(websocket: websocket)
 
-      trigger(:disconnect, socket)
+      trigger(:disconnect, client)
     end
   end
 end
