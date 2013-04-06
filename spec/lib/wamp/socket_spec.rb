@@ -20,11 +20,11 @@ describe WAMP::Socket do
       expect(new_socket.topics).to eq []
     end
 
-    it "should send the welcome message" do
-      ds = DummySocket.new
-      ds.should_receive :send
-      WAMP::Socket.new("sampleid", ds)
-    end
+    # it "should send the welcome message" do
+    #   ds = DummySocket.new
+    #   ds.should_receive :send
+    #   WAMP::Socket.new("sampleid", ds)
+    # end
   end
 
   it 'should add a new topic to client' do

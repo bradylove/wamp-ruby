@@ -5,14 +5,14 @@ module WAMP
   class Server
     include WAMP::Bindable
 
-    attr_accessor :options, :sockets, :topics, :callbacks
+    attr_accessor :options, :topics, :callbacks
 
     def initialize(options = {})
-      @options = options
-      @sockets = {}
-      @topics  = {}
+      @options   = options
 
+      @topics    = {}
       @callbacks = {}
+      @engine    = WAMP::Engines::Memory.new
     end
 
     def available_bindings
@@ -40,13 +40,14 @@ module WAMP
   private
 
     def handle_open(websocket, event)
-      socket = @sockets[websocket] = WAMP::Socket.new(SecureRandom.uuid, websocket)
+      client = @engine.create_client(websocket)
 
-      trigger(:connect, socket)
+      trigger(:connect, client)
     end
 
     def handle_message(websocket, event)
-      socket = @sockets[websocket]
+      socket = @engine.find_clients(websocket: websocket)
+      # socket = @sockets[websocket]
 
       parsed_msg = JSON.parse(event.data)
       msg_type   = parsed_msg[0]

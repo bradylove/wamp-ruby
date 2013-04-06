@@ -29,7 +29,7 @@ module WAMP
 
     def send_welcome_message
       welcome_msg = [WAMP::MessageType[:WELCOME], id, WAMP.protocol_version, WAMP.identity]
-      websocket.send welcome_msg.to_json
+      # websocket.send welcome_msg.to_json
     end
   end
 end
