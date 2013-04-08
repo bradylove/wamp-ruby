@@ -10,7 +10,7 @@ gem 'faye-websocket'
 group :development do
   gem "rspec"
   gem 'guard-rspec'
-  gem 'pry'
+  gem 'pry-nav'
   gem 'rb-fsevent'
   gem 'rb-inotify'
   gem 'fuubar'

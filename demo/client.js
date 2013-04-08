@@ -1,5 +1,5 @@
 var wamp, topicName, topicPath, prefix;
-var wsuri     = "ws://localhost:9292";
+var wsuri     = "ws://local.blove.me:9292";
 
 debugData = function(msg){
   $("#debug-data").append(msg + '</br>')
@@ -62,5 +62,5 @@ function sendSimpleMsg()
   msg = $("#simple-msg").val();
   $("#simple-msg").val("");
 
-  wamp.publish(prefix, msg);
+  wamp.publish("sample_topic:chat", msg);
 }

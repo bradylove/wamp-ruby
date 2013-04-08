@@ -108,23 +108,7 @@ module WAMP
       topic_name, payload, exclude, include = data
       topic = @engine.find_or_create_topic(topic_name)
 
-      if exclude == true
-        exclude = [client.id]
-      elsif exclude == false || exclude.nil?
-        exclude = []
-      end
-
-      # Send payload to all sockets subscribed to topic
-      # Todo: Fix this
-      @engine.clients.each_pair do |k, v|
-        next if exclude.include? v.id
-
-        if v.topics.include? topic
-          v.websocket.send [WAMP::MessageType[:EVENT], topic.uri, payload].to_json
-        end
-      end
-
-      # Todo: Filter send with include
+      topic.publish(client, @protocol, payload, exclude, include)
 
       trigger(:publish, client, topic.uri, payload, exclude, include)
     end
