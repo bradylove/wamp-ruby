@@ -41,9 +41,7 @@ module WAMP
       # Deletes a client
       # @param socket [WebSocket] The websocket to remove from clients
       # @return [WAMP::Socket] The client that was removed
-      def delete_client(websocket)
-        client = find_clients(websocket: websocket).first
-
+      def delete_client(client)
         clients.delete client.id
       end
 

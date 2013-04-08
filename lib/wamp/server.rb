@@ -133,7 +133,8 @@ module WAMP
     end
 
     def handle_close(websocket, event)
-      client = @engine.delete_client(websocket: websocket)
+      client = @engine.find_clients(websocket: websocket).first
+      @engine.delete_client(client)
 
       trigger(:disconnect, client)
     end

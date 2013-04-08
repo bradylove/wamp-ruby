@@ -7,9 +7,14 @@
   </head>
   <body>
     <div id="debug-data"></div>
-    <button onclick="connect();">Connect</button>
-    <input type="text" id="prefix-curie"></input><button onclick="registerPrefix()">Register Prefix</button>
-    <input type="text" id="topic-name"></input><button onclick="subscribe()">Subscribe</button><button onclick="unsubscribe()">Unsubscribe</button>
+    <button onclick="connect();">Connect</button></br>
+    <button onclick="registerPrefix('sample_topic', 'sample_topic');">Register Prefix ( sample_topic )</button></br>
+    <button onclick="subscribe('sample_topic:chat');">Subscribe Topic ( sample_topic:chat )</button></br>
+    <button onclick="unsubscribe();">Unsubscribe Topic ( sample_topic:chat )</button></br>
     <input type="text" id="simple-msg"></input><button onclick="sendSimpleMsg()">Send</button>
+
+    <!-- <button onclick="connect();">Connect</button> -->
+    <!-- <input type="text" id="prefix-curie"></input><button onclick="registerPrefix()">Register Prefix</button> -->
+    <!-- <input type="text" id="topic-name"></input><button onclick="subscribe()">Subscribe</button><button onclick="unsubscribe()">Unsubscribe</button> -->
   </abody>
 </html>
