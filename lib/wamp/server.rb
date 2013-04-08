@@ -97,9 +97,7 @@ module WAMP
     # Handle an unsubscribe message from client
     # UNSUBSCRIBE data structure [TOPIC]
     def handle_unsubscribe(client, data)
-      topic = @topics[data[0]]
-
-      client.remove_topic(topic) if topic
+      topic = @engine.unsubscribe_client_from_topic(client, data[0])
 
       trigger(:unsubscribe, client, topic.uri)
     end
@@ -108,7 +106,6 @@ module WAMP
     # PUBLISH data structure [TOPIC, DATA, EXCLUDE, INCLUDE]
     def handle_publish(client, data)
       topic_name, payload, exclude, include = data
-
       topic = @engine.find_or_create_topic(topic_name)
 
       if exclude == true
@@ -133,8 +130,8 @@ module WAMP
     end
 
     def handle_close(websocket, event)
-      client = @engine.find_clients(websocket: websocket).first
-      @engine.delete_client(client)
+      # client = @engine.find_clients(websocket: websocket).first
+      client = @engine.delete_client(websocket)
 
       trigger(:disconnect, client)
     end

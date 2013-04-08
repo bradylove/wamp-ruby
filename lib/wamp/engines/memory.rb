@@ -41,7 +41,9 @@ module WAMP
       # Deletes a client
       # @param socket [WebSocket] The websocket to remove from clients
       # @return [WAMP::Socket] The client that was removed
-      def delete_client(client)
+      def delete_client(websocket)
+        client = find_clients(websocket: websocket).first
+
         clients.delete client.id
       end
 
@@ -59,6 +61,7 @@ module WAMP
       end
 
       # Add a client to a topic and a topic to a client
+      # @param client [WAMP::Socket] The client socket to subscribe to the topic.
       # @param topic_uri [String] URI or CURIE the client is to subscribe to.
       # @return [WAMP::Topic] The topic that the client subscribed to.
       def subscribe_client_to_topic(client, topic_uri)
@@ -66,6 +69,19 @@ module WAMP
 
         client.add_topic(topic)
         topic.add_client(client)
+
+        topic
+      end
+
+      # Remove a client from a topic.
+      # @param client [WAMP::Socket] The client socket to unsubscribe from the topic.
+      # @param topic_uri [String] The URI of the topic to unsubscribe from.
+      # @return [WAMP::Topic] The topic that the client unsubscribed from.
+      def unsubscribe_client_from_topic(client, topic_uri)
+        topic = find_or_create_topic(topic_uri)
+
+        client.remove_topic(topic)
+        topic.remove_client(client)
 
         topic
       end

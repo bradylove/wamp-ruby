@@ -95,5 +95,24 @@ describe WAMP::Engines::Memory do
         expect(@sub).to eq @topic
       end
     end
+
+    context "topic unsubscription" do
+      before do
+        @client = memory.create_client(@ds1)
+        @topic  = memory.find_or_create_topic("http://localhost/sample_topic")
+
+        @sub = memory.subscribe_client_to_topic @client, @topic.uri
+      end
+
+      it "should remove the client from the topic" do
+        expect { memory.unsubscribe_client_from_topic @client, @topic.uri }
+          .to change(@topic.clients, :size).by(-1)
+      end
+
+      it "should remove the topic from the client" do
+        expect { memory.unsubscribe_client_from_topic @client, @topic.uri }
+          .to change(@client.topics, :size).by(-1)
+      end
+    end
   end
 end

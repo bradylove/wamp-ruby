@@ -10,5 +10,9 @@ module WAMP
     def add_client(client)
       clients << client unless clients.include? client
     end
+
+    def remove_client(client)
+      clients.delete client
+    end
   end
 end
