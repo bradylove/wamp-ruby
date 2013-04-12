@@ -11,7 +11,7 @@ module WAMP
       # Creates a new instance of the memory engine as well as some empty hashes
       # for holding clients and topics.
       # @param options [Hash] Optional. Options hash for the memory engine.
-      def initialize(options = {})
+      def initialize(options)
         @options = options
         @clients = {}
         @topics  = {}
@@ -86,7 +86,17 @@ module WAMP
         topic
       end
 
+      def create_event(client, topic_uri, payload, exclude, include)
+        topic = find_or_create_topic(topic_uri)
+
+        topic.publish(client, protocol, payload, exclude, include) if topic
+      end
+
       private
+
+      def protocol
+        WAMP::Protocols::Version1.new
+      end
 
       def new_client(websocket)
         WAMP::Socket.new(random_uuid, websocket)

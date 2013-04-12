@@ -13,10 +13,10 @@ module WAMP
   autoload :MessageType, File.join(ROOT, "wamp", "message_type")
 
   module Engines
-    autoload :Memory,      File.join(ROOT, "wamp", "engines", "memory")
+    autoload :Memory, File.join(ROOT, "wamp", "engines", "memory")
+    autoload :Redis,  File.join(ROOT, "wamp", "engines", "redis")
   end
 
-  # autoload :Protocols,   File.join(ROOT, "wamp", "protocols")
   module Protocols
     autoload :Version1, File.join(ROOT, "wamp", "protocols", "version_1")
   end

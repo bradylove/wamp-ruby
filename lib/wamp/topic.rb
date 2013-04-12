@@ -19,7 +19,11 @@ module WAMP
       rec_clients = clients.dup
 
       if excluded == true
-        excluded = [client.id]
+        if client
+          excluded = [client.id]
+        else
+          excluded = []
+        end
       elsif excluded == false || excluded.nil?
         excluded = []
       end
@@ -27,7 +31,7 @@ module WAMP
       rec_clients.delete_if { |c| excluded.include? c.id }
 
       if included
-        rec_clients.delete_if { |c| !included.include?(c.id) }
+        # rec_clients.delete_if { |c| !included.include?(c.id) }
       end
 
       rec_clients.each do |c|

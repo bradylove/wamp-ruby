@@ -25,6 +25,14 @@ module WAMP
       prefixes[prefix] = uri
     end
 
+    def to_json
+      {
+        id:       id,
+        topics:   topics,
+        prefixes: prefixes
+      }.to_json
+    end
+
     private
 
     def send_welcome_message

@@ -9,10 +9,12 @@ module WAMP
 
     def initialize(options = {})
       @options   = options
+      @options[:engine] ||= {}
+      @options[:engine][:type] ||= :memory
 
       @topics    = {}
       @callbacks = {}
-      @engine    = WAMP::Engines::Memory.new
+      @engine    = WAMP::Engines.const_get(camelize(@options[:engine][:type])).new(@options[:engine])
       @protocol  = WAMP::Protocols::Version1.new
     end
 
@@ -40,9 +42,13 @@ module WAMP
 
   private
 
+    def camelize(str)
+      str.to_s.split('_').map {|w| w.capitalize}.join
+    end
+
     def handle_open(websocket, event)
       client = @engine.create_client(websocket)
-              client.websocket.send @protocol.welcome(client.id)
+      client.websocket.send @protocol.welcome(client.id)
 
       trigger(:connect, client)
     end
@@ -105,12 +111,11 @@ module WAMP
     # Handle a message published by a client
     # PUBLISH data structure [TOPIC, DATA, EXCLUDE, INCLUDE]
     def handle_publish(client, data)
-      topic_name, payload, exclude, include = data
-      topic = @engine.find_or_create_topic(topic_name)
+      topic_uri, payload, exclude, include = data
 
-      topic.publish(client, @protocol, payload, exclude, include)
+      @engine.create_event(client, topic_uri, payload, exclude, include)
 
-      trigger(:publish, client, topic.uri, payload, exclude, include)
+      trigger(:publish, client, topic_uri, payload, exclude, include)
     end
 
     def handle_close(websocket, event)

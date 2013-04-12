@@ -1,5 +1,5 @@
 var wamp, topicName, topicPath, prefix;
-var wsuri     = "ws://localhost:9292";
+var wsuri     = "ws://localhost:9191";
 
 debugData = function(msg){
   $("#debug-data").append(msg + '</br>')
