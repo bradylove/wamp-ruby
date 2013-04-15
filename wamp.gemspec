@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "wamp"
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brady Love"]
-  s.date = "2013-04-04"
+  s.date = "2013-04-15"
   s.description = "A Ruby implementation of the WAMP (Web Application Messaging Protocol) WebSocket subprotocol"
   s.email = "love.brady@gmail.com"
   s.extra_rdoc_files = [
@@ -34,17 +34,22 @@ Gem::Specification.new do |s|
     "lib/wamp.rb",
     "lib/wamp/bindable.rb",
     "lib/wamp/client.rb",
+    "lib/wamp/engines/memory.rb",
     "lib/wamp/message_type.rb",
+    "lib/wamp/protocols/version_1.rb",
     "lib/wamp/server.rb",
     "lib/wamp/socket.rb",
     "lib/wamp/topic.rb",
     "spec/lib/wamp/client_spec.rb",
+    "spec/lib/wamp/engines/memory_spec.rb",
     "spec/lib/wamp/message_type_spec.rb",
+    "spec/lib/wamp/protocols/version_1_spec.rb",
     "spec/lib/wamp/server_spec.rb",
     "spec/lib/wamp/socket_spec.rb",
     "spec/lib/wamp/topic_spec.rb",
     "spec/lib/wamp_spec.rb",
     "spec/spec_helper.rb",
+    "spec/support/dummy_socket.rb",
     "wamp.gemspec"
   ]
   s.homepage = "http://github.com/bradylove/wamp-ruby"
@@ -61,11 +66,12 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<faye-websocket>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<guard-rspec>, [">= 0"])
-      s.add_development_dependency(%q<pry>, [">= 0"])
+      s.add_development_dependency(%q<pry-nav>, [">= 0"])
       s.add_development_dependency(%q<rb-fsevent>, [">= 0"])
       s.add_development_dependency(%q<rb-inotify>, [">= 0"])
       s.add_development_dependency(%q<fuubar>, [">= 0"])
-      s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
+      s.add_development_dependency(%q<yard>, [">= 0"])
+      s.add_development_dependency(%q<redcarpet>, [">= 0"])
       s.add_development_dependency(%q<bundler>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
     else
@@ -73,11 +79,12 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<faye-websocket>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<guard-rspec>, [">= 0"])
-      s.add_dependency(%q<pry>, [">= 0"])
+      s.add_dependency(%q<pry-nav>, [">= 0"])
       s.add_dependency(%q<rb-fsevent>, [">= 0"])
       s.add_dependency(%q<rb-inotify>, [">= 0"])
       s.add_dependency(%q<fuubar>, [">= 0"])
-      s.add_dependency(%q<rdoc>, ["~> 3.12"])
+      s.add_dependency(%q<yard>, [">= 0"])
+      s.add_dependency(%q<redcarpet>, [">= 0"])
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
     end
@@ -86,11 +93,12 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<faye-websocket>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<guard-rspec>, [">= 0"])
-    s.add_dependency(%q<pry>, [">= 0"])
+    s.add_dependency(%q<pry-nav>, [">= 0"])
     s.add_dependency(%q<rb-fsevent>, [">= 0"])
     s.add_dependency(%q<rb-inotify>, [">= 0"])
     s.add_dependency(%q<fuubar>, [">= 0"])
-    s.add_dependency(%q<rdoc>, ["~> 3.12"])
+    s.add_dependency(%q<yard>, [">= 0"])
+    s.add_dependency(%q<redcarpet>, [">= 0"])
     s.add_dependency(%q<bundler>, [">= 0"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
   end
