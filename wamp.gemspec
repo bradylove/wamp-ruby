@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "wamp"
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brady Love"]
@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
     "lib/wamp/bindable.rb",
     "lib/wamp/client.rb",
     "lib/wamp/engines/memory.rb",
+    "lib/wamp/engines/redis.rb",
     "lib/wamp/message_type.rb",
     "lib/wamp/protocols/version_1.rb",
     "lib/wamp/server.rb",
