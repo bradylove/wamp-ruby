@@ -16,6 +16,8 @@ module WAMP
 
     def initialize(options = {})
       @ws_server = options[:host] || "ws://localhost:9000"
+      @protocols = options[:protocols]
+      @headers = options[:headers]
       @id     = nil
       @socket = nil
       @wamp_protocol = nil
@@ -32,7 +34,7 @@ module WAMP
 
     def start
       EM.run do
-        ws = Faye::WebSocket::Client.new(ws_server)
+        ws = Faye::WebSocket::Client.new(ws_server, @protocols, {:headers => @headers})
 
         ws.onopen    = lambda { |event| handle_open(ws, event) }
         ws.onmessage = lambda { |event| handle_message(event) }
