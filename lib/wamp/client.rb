@@ -54,6 +54,12 @@ module WAMP
       topics << topic_uri
     end
 
+    def unsubscribe(topic_uri)
+      socket.send [WAMP::MessageType[:UNSUBSCRIBE], topic_uri].to_json
+
+      topics.delete(topic_uri)
+    end
+
     def publish(topic_uri, payload, options = {})
       exclude = options.fetch(:exclude, nil)
       include = options.fetch(:include, nil)
