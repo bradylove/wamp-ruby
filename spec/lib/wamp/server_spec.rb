@@ -21,7 +21,7 @@ describe WAMP::Server do
   context "bind" do
     it "should bind a subscribe callback do" do
       expect { server.bind(:subscribe) { |client_id, topic| } }
-        .to_not raise_error ""
+        .to_not raise_error
     end
 
     it "should raise an error if an invalid binding name is given" do
