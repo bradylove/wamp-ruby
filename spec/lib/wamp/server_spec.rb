@@ -6,7 +6,7 @@ describe WAMP::Server do
 
   context "initilization" do
     it "should accept a hash of options" do
-      expect(server.options).to eq({ host: "localhost", port: 9292 })
+      expect(server.options).to eq({ host: "localhost", port: 9292, engine: {type: :memory} })
     end
 
     it "should have an empty hash of topics" do

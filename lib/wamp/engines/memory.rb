@@ -11,7 +11,7 @@ module WAMP
       # Creates a new instance of the memory engine as well as some empty hashes
       # for holding clients and topics.
       # @param options [Hash] Optional. Options hash for the memory engine.
-      def initialize(options)
+      def initialize(options = {})
         @options = options
         @clients = {}
         @topics  = {}
