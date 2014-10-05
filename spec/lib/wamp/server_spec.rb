@@ -6,7 +6,7 @@ describe WAMP::Server do
 
   context "initilization" do
     it "should accept a hash of options" do
-      expect(server.options).to eq({ host: "localhost", port: 9292 })
+      expect(server.options).to eq({ host: "localhost", port: 9292, engine: {type: :memory} })
     end
 
     it "should have an empty hash of topics" do
@@ -21,7 +21,7 @@ describe WAMP::Server do
   context "bind" do
     it "should bind a subscribe callback do" do
       expect { server.bind(:subscribe) { |client_id, topic| } }
-        .to_not raise_error ""
+        .to_not raise_error
     end
 
     it "should raise an error if an invalid binding name is given" do
