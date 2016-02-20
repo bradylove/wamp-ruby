@@ -1,6 +1,8 @@
 ## WAMP Ruby
 
-This is an implementation of the WAMP (WebSocket Application Messaging Protocol http://www.wamp.ws) in Ruby. This implementation of the WAMP protocol is sitting on top of of the Faye WebSockets (https://github.com/faye/faye-websocket-ruby) gem.
+##### WAMP Ruby uses the WAMP v1 websocket sub-protocol
+
+This is an implementation of the WAMP v1 (WebSocket Application Messaging Protocol http://www.wamp.ws) in Ruby. This implementation of the WAMP protocol is sitting on top of of the Faye WebSockets (https://github.com/faye/faye-websocket-ruby) gem.
 
 Development has just started and is very incomplete. Currently only server side of the protocol, client will be coming soon. If you are interested in helping out please feel free to fork and send pull requests :).
 
